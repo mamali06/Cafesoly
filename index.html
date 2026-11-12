@@ -1,0 +1,333 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#171513">
+<title>Cafe Soley | کافه سولی</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #171513;
+  color: #f4eee6;
+  font-family: Tahoma, Arial, sans-serif;
+  padding: 18px;
+}
+
+.container {
+  max-width: 650px;
+  margin: auto;
+}
+
+header {
+  text-align: center;
+  padding: 45px 15px 30px;
+  background: linear-gradient(145deg,#38312b,#171513);
+  border: 1px solid #665344;
+  border-radius: 18px;
+  margin-bottom: 25px;
+}
+
+.logo {
+  font-family: Georgia, serif;
+  font-size: 42px;
+  letter-spacing: 5px;
+  color: #c5a17c;
+}
+
+.subtitle {
+  color: #c4b6a6;
+  margin-top: 12px;
+  letter-spacing: 3px;
+  font-size: 12px;
+}
+
+.line {
+  width: 55px;
+  height: 2px;
+  background: #b28a65;
+  margin: 20px auto;
+}
+
+.description {
+  color: #d3c7bb;
+  font-size: 13px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.topbar h2 {
+  color: #c5a17c;
+  font-size: 21px;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.lang {
+  background: #382f28;
+  color: #e8c9a5;
+  border: 1px solid #80644b;
+  padding: 9px 15px;
+  border-radius: 8px;
+}
+
+.search {
+  width: 100%;
+  background: #25211e;
+  color: white;
+  border: 1px solid #514439;
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  outline: none;
+}
+
+.categories {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 14px;
+  margin-bottom: 10px;
+}
+
+.cat {
+  flex-shrink: 0;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #665344;
+  color: #d9c4ae;
+  background: #28221e;
+}
+
+.cat.active {
+  background: #a77b53;
+  color: white;
+  border-color: #a77b53;
+}
+
+.section-title {
+  color: #c5a17c;
+  font-size: 18px;
+  margin: 24px 0 13px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #24201d;
+  border: 1px solid #39312b;
+  border-radius: 12px;
+  padding: 17px;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.item-info h3 {
+  font-size: 15px;
+  margin-bottom: 7px;
+  color: #f2e6d9;
+}
+
+.item-info p {
+  font-size: 12px;
+  color: #a99b8e;
+  line-height: 1.8;
+}
+
+.price {
+  color: #c5a17c;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+footer {
+  text-align: center;
+  padding: 35px 10px 20px;
+  color: #998879;
+  font-size: 12px;
+  line-height: 2;
+}
+
+.hidden {
+  display: none !important;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+  <div class="logo">CAFE SOLEY</div>
+  <div class="line"></div>
+  <div class="subtitle">COFFEE • MOMENTS • LIFE</div>
+  <p class="description" style="margin-top:18px">
+    به کافه سولی خوش آمدید
+  </p>
+</header>
+
+<div class="topbar">
+  <h2 id="menuTitle">منوی کافه</h2>
+  <button class="lang" onclick="toggleLang()" id="langBtn">
+    English
+  </button>
+</div>
+
+<input
+  class="search"
+  id="search"
+  type="text"
+  placeholder="جستجوی نوشیدنی..."
+  oninput="renderMenu()"
+>
+
+<div class="categories" id="categories"></div>
+
+<div id="menu"></div>
+
+<footer>
+  <div class="line"></div>
+  <div>CAFE SOLEY</div>
+  <div>Thank you for choosing us 🤎</div>
+</footer>
+
+</div>
+
+<script>
+
+const items = [
+  {name:"اسپرسو",en:"Espresso",cat:"hot",price:"—",desc:"قهوه خالص و غلیظ"},
+  {name:"آمریکانو",en:"Americano",cat:"hot",price:"—",desc:"اسپرسو و آب گرم"},
+  {name:"کاپوچینو",en:"Cappuccino",cat:"hot",price:"—",desc:"اسپرسو، شیر و فوم"},
+  {name:"لاته",en:"Latte",cat:"hot",price:"—",desc:"اسپرسو و شیر بخار داده شده"},
+  {name:"موکا",en:"Mocha",cat:"hot",price:"—",desc:"قهوه و شکلات"},
+  {name:"هات چاکلت",en:"Hot Chocolate",cat:"hot",price:"—",desc:"شکلات داغ"},
+  {name:"چای",en:"Tea",cat:"hot",price:"—",desc:"چای گرم"},
+  {name:"ماچا لاته",en:"Matcha Latte",cat:"hot",price:"—",desc:"ماچا و شیر"},
+
+  {name:"آیس آمریکانو",en:"Iced Americano",cat:"cold",price:"—",desc:"اسپرسو و آب سرد"},
+  {name:"آیس لاته",en:"Iced Latte",cat:"cold",price:"—",desc:"اسپرسو و شیر سرد"},
+  {name:"آیس موکا",en:"Iced Mocha",cat:"cold",price:"—",desc:"قهوه و شکلات سرد"},
+  {name:"آیس کارامل ماکیاتو",en:"Iced Caramel Macchiato",cat:"cold",price:"—",desc:"قهوه، شیر و کارامل"},
+  {name:"آیس چاکلت",en:"Iced Chocolate",cat:"cold",price:"—",desc:"شکلات سرد"},
+  {name:"آیس ماچا",en:"Iced Matcha",cat:"cold",price:"—",desc:"ماچا سرد"},
+
+  {name:"لیموناد",en:"Lemonade",cat:"other",price:"—",desc:"نوشیدنی لیمویی"},
+  {name:"موهیتو",en:"Mojito",cat:"other",price:"—",desc:"نعنا و لیمو"},
+  {name:"اسموتی",en:"Smoothie",cat:"other",price:"—",desc:"نوشیدنی میوه‌ای"},
+  {name:"شیک شکلات",en:"Chocolate Shake",cat:"other",price:"—",desc:"میلک‌شیک شکلاتی"},
+  {name:"شیک وانیل",en:"Vanilla Shake",cat:"other",price:"—",desc:"میلک‌شیک وانیلی"}
+];
+
+let english = false;
+let activeCat = "all";
+
+function toggleLang() {
+  english = !english;
+  document.documentElement.dir = english ? "ltr" : "rtl";
+  document.documentElement.lang = english ? "en" : "fa";
+  document.getElementById("langBtn").textContent =
+    english ? "فارسی" : "English";
+  document.getElementById("menuTitle").textContent =
+    english ? "Cafe Menu" : "منوی کافه";
+  document.getElementById("search").placeholder =
+    english ? "Search drinks..." : "جستجوی نوشیدنی...";
+  renderCategories();
+  renderMenu();
+}
+
+function renderCategories() {
+  const cats = [
+    {id:"all",fa:"همه",en:"All"},
+    {id:"hot",fa:"نوشیدنی گرم",en:"Hot Drinks"},
+    {id:"cold",fa:"نوشیدنی سرد",en:"Cold Drinks"},
+    {id:"other",fa:"سایر نوشیدنی‌ها",en:"Other"}
+  ];
+
+  document.getElementById("categories").innerHTML =
+    cats.map(c => `
+      <button class="cat ${activeCat===c.id?'active':''}"
+      onclick="selectCat('${c.id}')">
+      ${english ? c.en : c.fa}
+      </button>
+    `).join("");
+}
+
+function selectCat(cat) {
+  activeCat = cat;
+  renderCategories();
+  renderMenu();
+}
+
+function renderMenu() {
+  const query = document.getElementById("search").value.toLowerCase();
+
+  const filtered = items.filter(item => {
+    const matchCat = activeCat === "all" || item.cat === activeCat;
+    const matchSearch =
+      item.name.toLowerCase().includes(query) ||
+      item.en.toLowerCase().includes(query);
+    return matchCat && matchSearch;
+  });
+
+  const menu = document.getElementById("menu");
+
+  if (!filtered.length) {
+    menu.innerHTML = "<p style='text-align:center;color:#bba995;padding:30px'>موردی پیدا نشد</p>";
+    return;
+  }
+
+  const groups = [
+    {id:"hot",fa:"نوشیدنی‌های گرم",en:"Hot Drinks"},
+    {id:"cold",fa:"نوشیدنی‌های سرد",en:"Cold Drinks"},
+    {id:"other",fa:"سایر نوشیدنی‌ها",en:"Other Drinks"}
+  ];
+
+  menu.innerHTML = groups.map(group => {
+    const list = filtered.filter(i => i.cat === group.id);
+    if (!list.length) return "";
+
+    return `
+      <h3 class="section-title">
+        ${english ? group.en : group.fa}
+      </h3>
+      ${list.map(item => `
+        <div class="menu-item">
+          <div class="item-info">
+            <h3>${english ? item.en : item.name}</h3>
+            <p>${english ? item.desc : item.desc}</p>
+          </div>
+          <div class="price">
+            ${item.price === "—" ? (english ? "Price TBA" : "قیمت ثبت نشده") : item.price}
+          </div>
+        </div>
+      `).join("")}
+    `;
+  }).join("");
+}
+
+renderCategories();
+renderMenu();
+
+</script>
+</body>
+</html>
